@@ -7,6 +7,7 @@ public abstract class Segment {
 
   public abstract void draw();
   public abstract Segment offset(float offset);
+  public abstract float getLength();
 
   PVector intersectionPoint(PVector A, PVector B, PVector C, PVector D) {
     // Calculate direction vectors of the lines

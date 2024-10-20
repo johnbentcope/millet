@@ -23,4 +23,9 @@ public class LineSegment extends Segment {
     PVector newEnd = end.copy().add(normal);
     return new LineSegment(newStart, newEnd);
   }
+
+  @Override
+    public float getLength() {
+    return PVector.dist(start, end);
+  }
 }

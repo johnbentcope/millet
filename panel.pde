@@ -1,7 +1,12 @@
 class Panel extends PApplet {
   private ArrayList<Edge> edges;
 
-  public Panel() {
+  float seam_allowance;
+  float stitch_pitch;
+
+  public Panel(float seam_allowance, float stitch_pitch) {
+    this.seam_allowance = seam_allowance;
+    this.stitch_pitch   = stitch_pitch;
     edges = new ArrayList<>();
   }
 
@@ -16,20 +21,19 @@ class Panel extends PApplet {
     JSONArray jsonArray = json.getJSONArray("edges");
     for (int i = 0; i < jsonArray.size(); i++) {
       JSONObject edgeJson = jsonArray.getJSONObject(i);
-      Edge edge = new Edge(); // Pass PApplet instance to Edge constructor
+      Edge edge = new Edge(stitch_pitch); // Pass PApplet instance to Edge constructor
       edge.parseJSON(edgeJson);
       edges.add(edge);
     }
   }
 
-  void offset(float offset) {
+  void offset() {
     for (Edge edge : edges) {
-      edge.offset(offset);
+      edge.offset(seam_allowance);
     }
   }
 
   public ArrayList<Edge> getEdges() {
     return edges;
   }
-
 }

@@ -9,7 +9,8 @@
 // generate a new SVG ready for lasering, with stitch punches in one color and cut lines in another
 
 ArrayList<Panel> panels;
-float offset = 20;
+float seam_allowance = 20;
+float stitch_pitch = 10;
 
 void setup() {
   size(400, 400);
@@ -19,16 +20,16 @@ void setup() {
   //JSONObject json = parseJSONObject(my_conf);
   JSONArray panelsArray = json.getJSONArray("panels");
   panels = new ArrayList<>();
-  for (int i = 0; i < panelsArray.size(); i++) {
+  for (int i = 0; i < panelsArray.size()-1; i++) {
     JSONObject panelJson = panelsArray.getJSONObject(i);
-    Panel panel = new Panel();
+    Panel panel = new Panel(seam_allowance, stitch_pitch);
     panel.parseJSON(panelJson);
     panels.add(panel);
   }
 
   // Offset panels
   for (Panel panel : panels) {
-    panel.offset(offset);
+    panel.offset();
   }
 }
 
@@ -37,5 +38,4 @@ void draw() {
 
   // Draw panel
   panels.get(0).draw();
-  
 }

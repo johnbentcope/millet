@@ -1,5 +1,9 @@
 public class CurveSegment extends Segment {
   private PVector[] controlPoints;
+  private int len = 100;
+  private float arcLengths[] = new float[len+1];
+  private float curveLength = 0;
+  
 
   public CurveSegment(JSONObject json) {
     JSONArray controlPointsArray = json.getJSONArray("controlPoints");
@@ -12,13 +16,37 @@ public class CurveSegment extends Segment {
       JSONObject controlPointJson = controlPointsArray.getJSONObject(i);
       controlPoints[i] = new PVector(controlPointJson.getFloat("x"), controlPointJson.getFloat("y"));
     }
+    init();
   }
+
   public CurveSegment(PVector A, PVector B, PVector C, PVector D) {
     controlPoints = new PVector[4];
     controlPoints[0] = A.copy();
     controlPoints[1] = B.copy();
     controlPoints[2] = C.copy();
     controlPoints[3] = D.copy();
+    init();
+  }
+
+  private void init() {
+    float cumulativeLength = 0;
+    arcLengths[0] = cumulativeLength;
+    PVector prev = bezPoint(0);
+    for (int i = 1; i <= len; i++){
+      PVector next = bezPoint(i / (float) len);
+      PVector delta = PVector.sub(next, prev);
+      cumulativeLength += delta.mag();
+      arcLengths[i] = cumulativeLength;
+      prev = next.copy();
+    }
+    curveLength = cumulativeLength;
+  }
+
+  private PVector bezPoint(float t) {
+    return new PVector(
+      bezierPoint(controlPoints[0].x, controlPoints[1].x, controlPoints[2].x, controlPoints[3].x, t),
+      bezierPoint(controlPoints[0].y, controlPoints[1].y, controlPoints[2].y, controlPoints[3].y, t)
+      );
   }
 
   @Override
@@ -30,6 +58,7 @@ public class CurveSegment extends Segment {
       controlPoints[3].x, controlPoints[3].y);
   }
 
+  // BUG: IF ABC or BCD are colinear, this returns a null PVector for a control point
   @Override
     public CurveSegment offset(float offset) {
     PVector new_curve[] = new PVector[4];
@@ -53,5 +82,10 @@ public class CurveSegment extends Segment {
     new_curve[3] = CD.end;
 
     return new CurveSegment(new_curve[0], new_curve[1], new_curve[2], new_curve[3]);
+  }
+
+  @Override
+    public float getLength() {
+    return curveLength;
   }
 }
