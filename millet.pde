@@ -17,7 +17,7 @@ void setup() {
   // Get ready to initialize panels
   panels = new ArrayList<Panel>();
   float seam_allowance = 20;
-  float stitch_pitch = 100;
+  float stitch_pitch = 10;
 
   // Load the panel description file and initialize all panels
   String jsonFilePath = "data/augh.json";

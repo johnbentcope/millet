@@ -80,7 +80,7 @@ public class CurveSegment extends Segment {
       float t = (distance - lengthBefore) / window;
       print("ct ");
       println(t);
-      return PVector.lerp(bezPoint(lengthBefore), bezPoint(lengthAfter), t );
+      return PVector.lerp(bezPoint(lengthBefore/curveLength), bezPoint(lengthAfter/curveLength), t );
     }
   }
 
