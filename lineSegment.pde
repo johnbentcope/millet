@@ -25,6 +25,13 @@ public class LineSegment extends Segment {
   }
 
   @Override
+    public PVector get_stitch(float distance) {
+    print("ldistance ");
+    println(distance);
+    return PVector.lerp(end, start, distance/getLength());
+  }
+
+  @Override
     public float getLength() {
     return PVector.dist(start, end);
   }

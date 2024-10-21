@@ -3,7 +3,7 @@ public class CurveSegment extends Segment {
   private int len = 100;
   private float arcLengths[] = new float[len+1];
   private float curveLength = 0;
-  
+
 
   public CurveSegment(JSONObject json) {
     JSONArray controlPointsArray = json.getJSONArray("controlPoints");
@@ -33,7 +33,7 @@ public class CurveSegment extends Segment {
     float cumulativeLength = 0;
     arcLengths[0] = cumulativeLength;
     PVector prev = bezPoint(0);
-    for (int i = 1; i <= len; i++){
+    for (int i = 1; i <= len; i++) {
       PVector next = bezPoint(i / (float) len);
       PVector delta = PVector.sub(next, prev);
       cumulativeLength += delta.mag();
@@ -41,6 +41,47 @@ public class CurveSegment extends Segment {
       prev = next.copy();
     }
     curveLength = cumulativeLength;
+  }
+
+  @Override
+    public PVector get_stitch(float distance) {
+
+    int low = 0;
+    int high = len - 1;
+    int index = 0;
+    print("cdistance ");
+    println(distance);
+
+    while (low <= high) {
+      index = low + (high - low) / 2;
+
+      if (arcLengths[index+1] < distance) {
+        low = index + 1;
+      } else if (arcLengths[index] > distance) {
+        high = index - 1;
+      } else {
+        break;
+      }
+    }
+
+    float lengthBefore = arcLengths[index];
+
+    if (lengthBefore == distance) {
+      return bezPoint(index / (float) len);
+    } else {
+      float lengthAfter = arcLengths[index+1];
+      print("clengthBefore ");
+      println(lengthBefore);
+      print("clengthAfter ");
+      println(lengthAfter);
+      float window = lengthAfter - lengthBefore;
+      print("cwindow ");
+      println(window);
+      float t = (distance - lengthBefore) / window;
+      print("ct ");
+      println(t);
+      return PVector.lerp(bezPoint(lengthBefore), bezPoint(lengthAfter), t );
+    }
   }
 
   // Return a point on a bezier, not arc-length parameterized

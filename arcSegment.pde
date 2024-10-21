@@ -24,12 +24,20 @@ public class ArcSegment extends Segment {
     arc(center.x, center.y, size.x, size.y, startAngle, endAngle);
   }
 
+  @Override
+    public PVector get_stitch(float distance) {
+      print("adistance ");
+      println(distance);
+    float lerp_angle = lerp(startAngle, endAngle, distance/getLength());
+    return PVector.fromAngle((lerp_angle)).mult(size.x/2).add(center);
+  }
+
   // Return an offset arc path for seam allowance
   @Override
     public ArcSegment offset(float offset) {
     return new ArcSegment(center, PVector.mult( size, (size.x + offset*2) / (size.x)), startAngle, endAngle);
   }
-  
+
   // Return length of the arc path
   @Override
     public float getLength() {

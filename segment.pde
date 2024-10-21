@@ -8,6 +8,7 @@ public abstract class Segment {
   public abstract void draw();
   public abstract Segment offset(float offset);
   public abstract float getLength();
+  public abstract PVector get_stitch(float distance);
 
   PVector intersectionPoint(PVector A, PVector B, PVector C, PVector D) {
     // Calculate direction vectors of the lines
