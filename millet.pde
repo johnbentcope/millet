@@ -9,17 +9,20 @@
 // generate a new SVG ready for lasering, with stitch punches in one color and cut lines in another
 
 ArrayList<Panel> panels;
-float seam_allowance = 20;
-float stitch_pitch = 10;
 
 void setup() {
+  // Set up canvas
   size(400, 400);
-  panels = new ArrayList<Panel>(); // Pass PApplet instance to Panel constructor
-  String jsonFilePath = "data/augh.json"; // Replace with your actual file path
+  
+  // Get ready to initialize panels
+  panels = new ArrayList<Panel>();
+  float seam_allowance = 20;
+  float stitch_pitch = 10;
+
+  // Load the panel description file and initialize all panels
+  String jsonFilePath = "data/augh.json";
   JSONObject json = loadJSONObject(jsonFilePath);
-  //JSONObject json = parseJSONObject(my_conf);
   JSONArray panelsArray = json.getJSONArray("panels");
-  panels = new ArrayList<>();
   for (int i = 0; i < panelsArray.size()-1; i++) {
     JSONObject panelJson = panelsArray.getJSONObject(i);
     Panel panel = new Panel(seam_allowance, stitch_pitch);
@@ -27,7 +30,7 @@ void setup() {
     panels.add(panel);
   }
 
-  // Offset panels
+  // Calculate seam allowances for all panels
   for (Panel panel : panels) {
     panel.offset();
   }
@@ -36,6 +39,6 @@ void setup() {
 void draw() {
   background(200);
 
-  // Draw panel
+  // Draw first panel
   panels.get(0).draw();
 }

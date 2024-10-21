@@ -32,8 +32,4 @@ class Panel extends PApplet {
       edge.offset(seam_allowance);
     }
   }
-
-  public ArrayList<Edge> getEdges() {
-    return edges;
-  }
 }

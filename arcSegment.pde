@@ -9,6 +9,7 @@ public class ArcSegment extends Segment {
     startAngle = json.getJSONObject("angles").getFloat("start");
     endAngle = json.getJSONObject("angles").getFloat("end");
   }
+
   public ArcSegment(PVector center, PVector size, float startAngle, float endAngle) {
     this.center     = center.copy();
     this.size       = size.copy();
@@ -16,17 +17,20 @@ public class ArcSegment extends Segment {
     this.endAngle   = endAngle;
   }
 
+  // Render the arc path to the screen or output file
   @Override
     public void draw() {
     noFill();
     arc(center.x, center.y, size.x, size.y, startAngle, endAngle);
   }
 
+  // Return an offset arc path for seam allowance
   @Override
     public ArcSegment offset(float offset) {
     return new ArcSegment(center, PVector.mult( size, (size.x + offset*2) / (size.x)), startAngle, endAngle);
   }
-
+  
+  // Return length of the arc path
   @Override
     public float getLength() {
     // Calculate the angle of the arc in radians

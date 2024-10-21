@@ -28,6 +28,7 @@ public class CurveSegment extends Segment {
     init();
   }
 
+  // Approximate the length of the curve
   private void init() {
     float cumulativeLength = 0;
     arcLengths[0] = cumulativeLength;
@@ -42,6 +43,7 @@ public class CurveSegment extends Segment {
     curveLength = cumulativeLength;
   }
 
+  // Return a point on a bezier, not arc-length parameterized
   private PVector bezPoint(float t) {
     return new PVector(
       bezierPoint(controlPoints[0].x, controlPoints[1].x, controlPoints[2].x, controlPoints[3].x, t),
@@ -49,6 +51,7 @@ public class CurveSegment extends Segment {
       );
   }
 
+  // Render the curve path to the screen or output file
   @Override
     public void draw() {
     noFill();
@@ -58,6 +61,7 @@ public class CurveSegment extends Segment {
       controlPoints[3].x, controlPoints[3].y);
   }
 
+  // Return an offset curve path for seam allowance
   // BUG: IF ABC or BCD are colinear, this returns a null PVector for a control point
   @Override
     public CurveSegment offset(float offset) {
@@ -84,6 +88,7 @@ public class CurveSegment extends Segment {
     return new CurveSegment(new_curve[0], new_curve[1], new_curve[2], new_curve[3]);
   }
 
+  // Return curve length
   @Override
     public float getLength() {
     return curveLength;

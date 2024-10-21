@@ -1,3 +1,7 @@
+// In the case of stitching panels for a beanbag, an Edge refers to one "side" of a panel
+// in which stitches are positioned uniformly. Edges can be made of multiple segments,
+// such as lines, arc, or cubic bezier curves.
+
 class Edge {
   ArrayList<Segment> segments;
   ArrayList<Segment> cutPaths;
@@ -69,10 +73,7 @@ class Edge {
     }
   }
 
-  ArrayList<Segment> getSegments() {
-    return segments;
-  }
-
+  // Perform offsetting operation on all segments in edge
   void offset(float offset) {
     cutPaths.clear();
     for (Segment segment : segments) {
